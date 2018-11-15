@@ -3,12 +3,34 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-ARAMLadder-1B69BE4E-3630-4A23-A1D2-AE0EC5EF61A9</UserSecretsId>
+    <DockerTargetOS>Linux</DockerTargetOS>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20181114201428_CreateIdentitySchema.cs" />
+    <Compile Remove="Migrations\20181114201428_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Migrations\20181114214821_MatchModel.cs" />
+    <Compile Remove="Migrations\20181114214821_MatchModel.Designer.cs" />
+    <Compile Remove="Migrations\20181114220648_MatchModel.cs" />
+    <Compile Remove="Migrations\20181114220648_MatchModel.Designer.cs" />
+    <Compile Remove="Migrations\20181115131405_MatchModel.cs" />
+    <Compile Remove="Migrations\20181115131405_MatchModel.Designer.cs" />
+    <Compile Remove="Migrations\20181115132027_addRiotName.cs" />
+    <Compile Remove="Migrations\20181115132027_addRiotName.Designer.cs" />
+    <Compile Remove="Migrations\20181115132557_ChangeGameId.cs" />
+    <Compile Remove="Migrations\20181115132557_ChangeGameId.Designer.cs" />
+    <Compile Remove="Migrations\20181115150340_AddTeamsKills.cs" />
+    <Compile Remove="Migrations\20181115150340_AddTeamsKills.Designer.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.1916590" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" PrivateAssets="All" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
 
 </Project>

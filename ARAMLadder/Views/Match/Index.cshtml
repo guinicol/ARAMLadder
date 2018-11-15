@@ -1,0 +1,109 @@
+﻿@model IEnumerable<ARAMLadder.Models.LoginGame>
+
+@{
+    ViewData["Title"] = "Index";
+    var nbwin = Model.Where(x => x.Win).Count();
+    var nbLose = Model.Where(x => !x.Win).Count();
+    var ratio = Math.Round((double)nbwin / (nbLose + nbwin)*100);
+}
+
+<h2>Vos Games</h2>
+<div class="panel panel-default">
+    <div class="row">
+        <div class="col-md-3">
+            <h3>KDA : @(Math.Round(Model.Average(x => x.Kills) * 10) / 10) / @(Math.Round(Model.Average(x => x.Deaths) * 10) / 10) / @(Math.Round(Model.Average(x => x.Assists) * 10) / 10)</h3>
+        </div>
+        <div class="col-md-2">
+            <h4>Win : @nbwin | Lose : @nbLose</h4>
+            <h4>ratio : @ratio %</h4>
+        </div>
+        <div class="col-md-2">
+            <h4>Double Kill : @Model.Sum(x => x.DoubleKills)</h4>
+            <h4>Triple Kill : @Model.Sum(x => x.TripleKills)</h4>
+        </div>
+        <div class="col-md-2">
+
+            <h4>Quadra Kill : @Model.Sum(x => x.QuadraKills)</h4>
+            <h4>Penta Kill : @Model.Sum(x => x.PentaKills)</h4>
+        </div>
+        <div class="col-md-3">
+
+            <h4>First Blood : @Model.Count(x => x.FirstBloodKill)</h4>
+        </div>
+    </div>
+    
+</div>
+<hr/>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Kills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deaths)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assists)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DoubleKills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TripleKills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuadraKills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PentaKills)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstBloodKill)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    var durationMin = (item.Games.GameDuration % 60 < 10 ? "0" : "") + item.Games.GameDuration % 60;
+        <tr class="@(item.Win ? "bg-success" : "bg-danger")">
+            <td class="text-right">
+                @(new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc).AddMilliseconds(item.Games.GameCreation).ToShortDateString())
+            </td>
+            <td class="text-right">
+                @($"{item.Games.GameDuration/60}:{durationMin}")
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Kills)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Deaths)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Assists)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.DoubleKills)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.TripleKills)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.QuadraKills)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.PentaKills)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.FirstBloodKill)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

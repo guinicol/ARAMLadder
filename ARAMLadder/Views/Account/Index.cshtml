@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Update Riot Name";
+}
+
+<h2>Change Riot Name</h2>
+
+<p>
+    <strong>@ViewBag.RiotName</strong> est relié à votre compte
+</p>
+<form asp-action="UpdateRiotId">
+    <label for="riotName">Change Riot Name :</label>
+    <input id="riotName" name="riotName" class="form-control" />
+    <input type="submit" class="btn btn-default" />
+</form>
+

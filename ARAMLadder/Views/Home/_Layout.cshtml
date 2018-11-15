@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<nav aria-label="...">
+    <ul class="pager">
+        <li class="previous"><a asp-action="Index" asp-route-week="@(ViewBag.Week-1)"><span aria-hidden="true">&larr;</span> Semaine pr&eacute;c&eacute;dente</a></li>
+        <li class="h4">Semaine @ViewBag.Week</li>
+        <li class="next"><a asp-action="Index" asp-route-week="@(ViewBag.Week+1)">Semaine suivante <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>
+    <div class="text-center">
+        <ul class="pagination">
+            <li class="@(ViewBag.Day==DayOfWeek.Monday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Monday">L</a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Tuesday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Tuesday">M</a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Wednesday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Wednesday">M </a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Thursday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Thursday">J</a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Friday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Friday">V</a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Saturday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Saturday">S</a></li>
+            <li class="@(ViewBag.Day==DayOfWeek.Sunday ? "active": "")"><a asp-action="Index" asp-route-week="@(ViewBag.Week)" asp-route-day="@DayOfWeek.Sunday">D</a></li>
+        </ul>
+    </div>
+@RenderBody()

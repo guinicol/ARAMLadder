@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Identity
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<AramIdentityUser> SignInManager
+@inject UserManager<AramIdentityUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -9,6 +9,9 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <a asp-controller="Account" asp-action="Index" title="Edit Riot Id">Change Riot Name</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
