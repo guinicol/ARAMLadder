@@ -22,6 +22,7 @@ namespace ARAMLadder.Models
         public int QuadraKills { get; set; }
         public int PentaKills { get; set; }
         public bool FirstBloodKill { get; set; }
+        public int Level { get; set; }
 
         public Champion Champion { get; set; }
         public int? ChampionId { get; set; }

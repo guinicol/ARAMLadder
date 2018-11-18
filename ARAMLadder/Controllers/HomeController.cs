@@ -35,7 +35,7 @@ namespace ARAMLadder.Controllers
         {
 
             var riotIds = dbContext.Users.Select(u => u.riotId).ToList();
-            if (User.Identity.IsAuthenticated || week != null)
+            if (User.Identity.IsAuthenticated && week == null)
             {
                 var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
                 if (currentUser.riotId != 0)
@@ -131,6 +131,7 @@ namespace ARAMLadder.Controllers
                                                 PentaKills = stats.pentaKills,
                                                 FirstBloodKill = stats.firstBloodKill,
                                                 Win = stats.win,
+                                                Level=stats.champLevel,
                                                 Champion = champ
                                             };
                                             var items = await GetItemsFromStatsAsync(stats);
@@ -452,6 +453,8 @@ namespace ARAMLadder.Controllers
                                     dbContext.SaveChanges();
                                 }
                                 lg.Champion = champ;
+                                lg.Level = player.stats.champLevel;
+
                                 if (lg.Items.Count == 0)
                                 {
                                     var items = await GetItemsFromStatsAsync(player.stats);
