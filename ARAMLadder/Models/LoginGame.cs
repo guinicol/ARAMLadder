@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,5 +22,16 @@ namespace ARAMLadder.Models
         public int QuadraKills { get; set; }
         public int PentaKills { get; set; }
         public bool FirstBloodKill { get; set; }
+
+        public Champion Champion { get; set; }
+        public int? ChampionId { get; set; }
+
+        public IList<LoginGameItem> Items { get; set; }
+        public IList<LoginGameRune> Runes { get; set; }
+        public IList<LoginGameSpell> Spells { get; set; }
+
+
+
+
     }
 }

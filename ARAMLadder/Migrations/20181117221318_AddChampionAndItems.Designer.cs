@@ -3,14 +3,16 @@ using System;
 using ARAMLadder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ARAMLadder.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181117221318_AddChampionAndItems")]
+    partial class AddChampionAndItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -177,72 +179,6 @@ namespace ARAMLadder.Migrations
                     b.ToTable("LoginGameItems");
                 });
 
-            modelBuilder.Entity("ARAMLadder.Models.LoginGameRune", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("LoginGameId");
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("RuneId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoginGameId");
-
-                    b.HasIndex("RuneId");
-
-                    b.ToTable("LoginGameRunes");
-                });
-
-            modelBuilder.Entity("ARAMLadder.Models.LoginGameSpell", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("LoginGameId");
-
-                    b.Property<int>("Position");
-
-                    b.Property<int>("SpellId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LoginGameId");
-
-                    b.HasIndex("SpellId");
-
-                    b.ToTable("LoginGameSpells");
-                });
-
-            modelBuilder.Entity("ARAMLadder.Models.Rune", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("Icon");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Runes");
-                });
-
-            modelBuilder.Entity("ARAMLadder.Models.Spell", b =>
-                {
-                    b.Property<int>("Id");
-
-                    b.Property<string>("Icon");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Spells");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -378,34 +314,8 @@ namespace ARAMLadder.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ARAMLadder.Models.LoginGame", "LoginGame")
-                        .WithMany("Items")
-                        .HasForeignKey("LoginGameId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ARAMLadder.Models.LoginGameRune", b =>
-                {
-                    b.HasOne("ARAMLadder.Models.LoginGame", "LoginGame")
-                        .WithMany("Runes")
-                        .HasForeignKey("LoginGameId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ARAMLadder.Models.Rune", "Rune")
                         .WithMany()
-                        .HasForeignKey("RuneId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ARAMLadder.Models.LoginGameSpell", b =>
-                {
-                    b.HasOne("ARAMLadder.Models.LoginGame", "LoginGame")
-                        .WithMany("Spells")
                         .HasForeignKey("LoginGameId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ARAMLadder.Models.Spell", "Spell")
-                        .WithMany()
-                        .HasForeignKey("SpellId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

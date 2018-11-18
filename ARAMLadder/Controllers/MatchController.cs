@@ -28,6 +28,14 @@ namespace ARAMLadder.Controllers
             var user = await userManager.FindByNameAsync(User.Identity.Name);
             var matches = dbContext.LoginGames
                 .Include(lg => lg.Games)
+                .Include(lg => lg.Champion)
+                .Include(lg => lg.Items)
+                .ThenInclude(lgi => lgi.Item)
+                .Include(lg => lg.Spells)
+                .ThenInclude(lgi => lgi.Spell)
+                .Include(lg => lg.Runes)
+                .ThenInclude(lgi => lgi.Rune)
+                .OrderByDescending(x => x.Games.GameCreation)
                 .Where(g => g.AramIdentityUserId == user.Id);
             return View(matches);
 

@@ -1,10 +1,11 @@
 ﻿@model ARAMLadder.Models.HomeViewModel
+@inject ARAMLadder.Services.ILolStaticDataService lolStatic;
 @{
     ViewData["Title"] = "Home Page";
 }
 @if (Model.Games.Count != 0)
 {
-
+    <a class="btn btn-default" asp-action="UpdateChampId">update</a>
     <div class="panel panel-default">
         <div class="row">
             <div class="col-md-2 col-centered">
@@ -30,27 +31,55 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Games)
+            @foreach (var game in Model.Games)
             {
-                var durationMin = (item.GameDuration % 60 < 10 ? "0" : "") + item.GameDuration % 60;
-                var first = true;
-                <tr class="@(item.LoginGames.First().Win ? "bg-success" : "bg-danger")">
+                var durationMin = (game.GameDuration % 60 < 10 ? "0" : "") + game.GameDuration % 60;
+                <tr class="@(game.LoginGames.First().Win ? "bg-success" : "bg-danger")">
                     <td class="text-right">
-                        @($"{item.GameDuration / 60}:{durationMin}")
+                        @($"{game.GameDuration / 60}:{durationMin}")
                     </td>
                     <td class="text-center">
-                        @item.KillAlly / @item.KillEnnemy
+                        @game.KillAlly / @game.KillEnnemy
                     </td>
-                    <td>
-                        @foreach (var participant in item.LoginGames)
+                    <td style="width:620px">
+                        @foreach (var participant in game.LoginGames)
                         {
-                            var virgule = ",";
-                            if (first)
-                            {
-                                virgule = "";
-                                first = false;
-                            }
-                            @virgule @participant.AramIdentityUser.riotName
+                            var rune1 = participant.Runes.FirstOrDefault(x => x.Position == 1);
+                            var rune2 = participant.Runes.FirstOrDefault(x => x.Position == 5);
+                            var spell1 = participant.Spells.FirstOrDefault(x => x.Position == 1);
+                            var spell2 = participant.Spells.FirstOrDefault(x => x.Position == 2);
+                            <div class="row">
+
+                                <div class="col-xs-1" style="text-align:center; ">
+                                    <div>
+                                    <img class="img-circle" src="@(rune1 != null ? lolStatic.GetRuneIconPath(rune1.Rune.Icon):"")" style="height:20px;" alt="Icon @(rune1 != null ? rune1.Rune.Name:"")" title="@(rune1 != null ? rune1.Rune.Name:"")" />
+                                    <img class="img-circle" src="@(rune2 != null ? lolStatic.GetRuneIconPath(rune2.Rune.Icon):"")" style="height:15px; background-color:black;" alt="Icon @(rune2 != null ? rune2.Rune.Name:"")" title="@(rune2 != null ? rune2.Rune.Name:"")" />
+                                    </div>
+                                </div>
+                                <div class="col-xs-1" style="text-align:center;">
+                                    <img src="@(spell1 != null ? lolStatic.GetSpellIconPath(spell1.Spell.Icon):"")" style="height:20px;" alt="Icon @(spell1 != null ? spell1.Spell.Name:"")" title="@(spell1 != null ? spell1.Spell.Name:"")" />
+                                    <img src="@(spell2 != null ? lolStatic.GetSpellIconPath(spell2.Spell.Icon):"")" style="height:20px;" alt="Icon @(spell2 != null ? spell2.Spell.Name:"")" title="@(spell2 != null ? spell2.Spell.Name:"")" />
+                                </div>
+
+
+                                <div class="col-xs-1" style="text-align:center; margin-top:10px;">
+                                    18
+                                </div>
+                                <div class="col-xs-4">
+                                    <img src="@lolStatic.GetChampionIconPath(participant.Champion.Icon)" style="height:40px;" alt="Icon @participant.Champion.Name" title="@participant.Champion.Name" />
+                                    @participant.AramIdentityUser.riotName
+                                </div>
+                                <div class="col-xs-5">
+                                    <div class="pull-right">
+
+                                        @foreach (var item in participant.Items)
+                                        {
+                                            <img src="@lolStatic.GetItemIconPath(item.Item.Icon)" style="height:30px;" alt="Icon @item.Item.Name" title="@item.Item.Name" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
                         }
                     </td>
                 </tr>
@@ -60,5 +89,5 @@
 }
 else
 {
-    <h3 class="text-center">Pas de Game aujourd'hui :(</h3>
+    <h3 class="text-center">Pas de Game ce jour :(</h3>
 }

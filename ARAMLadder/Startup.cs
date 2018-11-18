@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ARAMLadder.Models;
 using Microsoft.AspNetCore.Authentication;
+using ARAMLadder.Services;
 
 namespace ARAMLadder
 {
@@ -74,6 +75,7 @@ namespace ARAMLadder
                 .AddDefaultUI();
             services.Configure<ApplicationConfiguration>(
           Configuration.GetSection("ApplicationConfigurations"));
+            services.AddScoped<ILolStaticDataService, LolStaticDataService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

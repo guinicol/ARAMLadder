@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20181115132557_ChangeGameId.Designer.cs" />
     <Compile Remove="Migrations\20181115150340_AddTeamsKills.cs" />
     <Compile Remove="Migrations\20181115150340_AddTeamsKills.Designer.cs" />
+    <Compile Remove="Migrations\20181117203041_AddChampionId.cs" />
+    <Compile Remove="Migrations\20181117203041_AddChampionId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

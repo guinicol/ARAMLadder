@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<ARAMLadder.Models.LoginGame>
-
+@inject ARAMLadder.Services.ILolStaticDataService lolStatic;
 @{
     ViewData["Title"] = "Index";
     var nbwin = Model.Where(x => x.Win).Count();
     var nbLose = Model.Where(x => !x.Win).Count();
-    var ratio = Math.Round((double)nbwin / (nbLose + nbwin)*100);
+    var ratio = Math.Round((double)nbwin / (nbLose + nbwin) * 100);
 }
 
 <h2>Vos Games</h2>
@@ -31,9 +31,9 @@
             <h4>First Blood : @Model.Count(x => x.FirstBloodKill)</h4>
         </div>
     </div>
-    
+
 </div>
-<hr/>
+<hr />
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -43,14 +43,8 @@
             <th>
                 Duration
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kills)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deaths)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Assists)
+            <th class="text-right">
+                K / D / A
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DoubleKills)
@@ -67,43 +61,82 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstBloodKill)
             </th>
+            <td></td>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-    var durationMin = (item.Games.GameDuration % 60 < 10 ? "0" : "") + item.Games.GameDuration % 60;
-        <tr class="@(item.Win ? "bg-success" : "bg-danger")">
-            <td class="text-right">
-                @(new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc).AddMilliseconds(item.Games.GameCreation).ToShortDateString())
-            </td>
-            <td class="text-right">
-                @($"{item.Games.GameDuration/60}:{durationMin}")
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.Kills)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.Deaths)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.Assists)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.DoubleKills)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.TripleKills)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.QuadraKills)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.PentaKills)
-            </td>
-            <td class="text-right">
-                @Html.DisplayFor(modelItem => item.FirstBloodKill)
-            </td>
-        </tr>
-}
+        @foreach (var game in Model)
+        {
+
+            var rune1 = game.Runes.FirstOrDefault(x => x.Position == 1);
+            var rune2 = game.Runes.FirstOrDefault(x => x.Position == 5);
+            var spell1 = game.Spells.FirstOrDefault(x => x.Position == 1);
+            var spell2 = game.Spells.FirstOrDefault(x => x.Position == 2);
+            var durationMin = (game.Games.GameDuration % 60 < 10 ? "0" : "") + game.Games.GameDuration % 60;
+            <tr class="@(game.Win ? "bg-success" : "bg-danger")">
+                <td class="text-right">
+                    @(new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc).AddMilliseconds(game.Games.GameCreation).ToShortDateString())
+                </td>
+                <td class="text-right">
+                    @($"{game.Games.GameDuration / 60}:{durationMin}")
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => game.Kills) / @Html.DisplayFor(modelItem => game.Deaths) / @Html.DisplayFor(modelItem => game.Assists)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => game.DoubleKills)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => game.TripleKills)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => game.QuadraKills)
+                </td>
+                <td class="text-right">
+                    @Html.DisplayFor(modelItem => game.PentaKills)
+                </td>
+                <td class="text-center">
+                    @if (game.FirstBloodKill)
+                    {
+                        <img alt="first Blood" title="First Blood" src="~/images/dripping-sword.png" style="height:30px; margin-top:25px;" />
+                    }
+                </td>
+                <td>
+
+                    <div class="row">
+
+                        <div class="col-xs-1" style="text-align:center; ">
+                            <div>
+                                <img class="img-circle" src="@(rune1 != null ? lolStatic.GetRuneIconPath(rune1.Rune.Icon):"")" style="height:20px;" alt="Icon @(rune1 != null ? rune1.Rune.Name:"")" title="@(rune1 != null ? rune1.Rune.Name:"")" />
+                                <img class="img-circle" src="@(rune2 != null ? lolStatic.GetRuneIconPath(rune2.Rune.Icon):"")" style="height:15px; background-color:black;" alt="Icon @(rune2 != null ? rune2.Rune.Name:"")" title="@(rune2 != null ? rune2.Rune.Name:"")" />
+                            </div>
+                        </div>
+                        <div class="col-xs-1" style="text-align:center;">
+                            <img src="@(spell1 != null ? lolStatic.GetSpellIconPath(spell1.Spell.Icon):"")" style="height:20px;" alt="Icon @(spell1 != null ? spell1.Spell.Name:"")" title="@(spell1 != null ? spell1.Spell.Name:"")" />
+                            <img src="@(spell2 != null ? lolStatic.GetSpellIconPath(spell2.Spell.Icon):"")" style="height:20px;" alt="Icon @(spell2 != null ? spell2.Spell.Name:"")" title="@(spell2 != null ? spell2.Spell.Name:"")" />
+                        </div>
+
+
+                        <div class="col-xs-1" style="text-align:center; margin-top:10px;">
+                            18
+                        </div>
+                        <div class="col-xs-1">
+                            <img src="@lolStatic.GetChampionIconPath(game.Champion.Icon)" style="height:40px;" alt="Icon @game.Champion.Name" title="@game.Champion.Name" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-xs-12">
+                            <div>
+
+                                @foreach (var item in game.Items)
+                                {
+                                    <img src="@lolStatic.GetItemIconPath(item.Item.Icon)" style="height:30px;" alt="Icon @item.Item.Name" title="@item.Item.Name" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
