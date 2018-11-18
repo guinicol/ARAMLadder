@@ -357,7 +357,7 @@ namespace ARAMLadder.Controllers
                     dbContext.Add(item);
                     await dbContext.SaveChangesAsync();
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     return null;
                 }
@@ -381,7 +381,7 @@ namespace ARAMLadder.Controllers
                     dbContext.Add(spell);
                     await dbContext.SaveChangesAsync();
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     return null;
                 }
@@ -405,7 +405,7 @@ namespace ARAMLadder.Controllers
                     dbContext.Add(rune);
                     await dbContext.SaveChangesAsync();
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     return null;
                 }
