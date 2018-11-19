@@ -1,15 +1,10 @@
 ﻿using ARAMLadder.Data;
 using ARAMLadder.Models;
-using ARAMLadder.Models.LolModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading;
 
 namespace ARAMLadder.Controllers
 {
@@ -23,9 +18,14 @@ namespace ARAMLadder.Controllers
             this.userManager = userManager;
             this.dbContext = dbContext;
         }
-        public async System.Threading.Tasks.Task<IActionResult> Index()
+        public async System.Threading.Tasks.Task<IActionResult> Index(int? id = null)
         {
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            AramIdentityUser user=null;
+            if (id != null)
+                user = await dbContext.Users.FirstOrDefaultAsync(x => x.riotId == id);
+            if (user == null)
+                user = await userManager.FindByNameAsync(User.Identity.Name);
+
             var matches = dbContext.LoginGames
                 .Include(lg => lg.Games)
                 .Include(lg => lg.Champion)
