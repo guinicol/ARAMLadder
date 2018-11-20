@@ -118,6 +118,8 @@ namespace ARAMLadder.Controllers
                                                 dbContext.Add(champ);
                                                 dbContext.SaveChanges();
                                             }
+                                            var lastGame = dbContext.LoginGames.OrderByDescending(x => x.Games.GameCreation).FirstOrDefault(x => x.AramIdentityUserId == user.Id);
+                                            var elo = GetEloCalc(lastGame, stats.win);
                                             var loginGame = new LoginGame
                                             {
                                                 Games = match,
@@ -131,8 +133,13 @@ namespace ARAMLadder.Controllers
                                                 PentaKills = stats.pentaKills,
                                                 FirstBloodKill = stats.firstBloodKill,
                                                 Win = stats.win,
-                                                Level=stats.champLevel,
-                                                Champion = champ
+                                                Level = stats.champLevel,
+                                                Champion = champ,
+                                                WinStreak = elo.winStreak,
+                                                LoseStreak = elo.loseStreak,
+                                                PointWin = elo.pointWin,
+                                                PointLose = elo.pointLose,
+                                                Score = elo.score
                                             };
                                             var items = await GetItemsFromStatsAsync(stats);
                                             foreach (var item in items)
@@ -145,12 +152,12 @@ namespace ARAMLadder.Controllers
                                                 await dbContext.AddAsync(lgItem);
 
                                             }
-                                            await dbContext.AddAsync(loginGame);
+                                            dbContext.Add(loginGame);
                                             var runes = await GetRunesFromStatsAsync(loginGame, stats);
-                                            await dbContext.AddRangeAsync(runes);
+                                            dbContext.AddRange(runes);
                                             var spells = await GetSpellsFromParticipantAsync(loginGame, player);
-                                            await dbContext.AddRangeAsync(spells);
-                                            await dbContext.SaveChangesAsync();
+                                            dbContext.AddRange(spells);
+                                            dbContext.SaveChanges();
                                         }
                                     }
                                 }
@@ -413,7 +420,29 @@ namespace ARAMLadder.Controllers
             }
             return rune;
         }
-
+        public IActionResult UpdateElo()
+        {
+            var games = dbContext.LoginGames
+                .Include(x => x.Games).GroupBy(x => x.AramIdentityUserId);
+            foreach (var localGame in games)
+            {
+                var userGame = localGame.OrderBy(x => x.Games.GameCreation);
+                LoginGame lastGame = null;
+                foreach (var item in userGame)
+                {
+                    var elo = GetEloCalc(lastGame, item.Win);
+                    item.LoseStreak = elo.loseStreak;
+                    item.WinStreak = elo.winStreak;
+                    item.PointLose = elo.pointLose;
+                    item.PointWin = elo.pointWin;
+                    item.Score = elo.score;
+                    dbContext.Update(item);
+                    lastGame = item;
+                }
+            }
+            dbContext.SaveChanges();
+            return Redirect("Index");
+        }
         public async Task<IActionResult> UpdateChampId()
         {
             var games = dbContext.Games
@@ -540,5 +569,44 @@ namespace ARAMLadder.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        private EloCalc GetEloCalc(LoginGame lastGame, bool win)
+        {
+            var EloCalc = new EloCalc
+            {
+                winStreak = 0,
+                loseStreak = 0,
+                pointWin = lastGame != null ? lastGame.PointWin : 20,
+                pointLose = lastGame != null ? lastGame.PointLose : 20,
+                score = lastGame != null ? lastGame.Score : 500
+            };
+
+
+            if (win)
+            {
+                EloCalc.winStreak = lastGame != null ? lastGame.WinStreak + 1 : 1;
+                EloCalc.pointWin += (EloCalc.winStreak / 2);
+                EloCalc.pointLose -= (EloCalc.winStreak / 2);
+                EloCalc.score += EloCalc.pointWin;
+            }
+            else
+            {
+                EloCalc.loseStreak = lastGame != null ? lastGame.LoseStreak + 1 : 1;
+                EloCalc.pointWin -= (EloCalc.loseStreak / 2);
+                EloCalc.pointLose += (EloCalc.loseStreak / 2);
+                EloCalc.score -= EloCalc.pointLose;
+            }
+            return EloCalc;
+        }
+        private class EloCalc
+        {
+            internal int winStreak;
+            internal int loseStreak;
+            internal int pointWin;
+            internal int pointLose;
+            internal int score;
+        }
     }
+
+    
 }

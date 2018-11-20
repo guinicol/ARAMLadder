@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,8 +32,13 @@ namespace ARAMLadder.Models
         public IList<LoginGameRune> Runes { get; set; }
         public IList<LoginGameSpell> Spells { get; set; }
 
-
-
-
+        public int WinStreak { get; set; }
+        public int LoseStreak { get; set; }
+        [DefaultValue(20)]
+        public int PointWin { get; set; }
+        [DefaultValue(20)]
+        public int PointLose { get; set; }
+        [DefaultValue(500)]
+        public int Score { get; set; }
     }
 }

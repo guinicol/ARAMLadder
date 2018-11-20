@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ARAMLadder.Models.RankingViewModel>
+@{
+    ViewData["Title"] = "Index";
+    var pos = 0;
+}
+
+<h2>Classement</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Classement</th>
+            <th>Nom</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            pos++;
+            <tr>
+                <td>@pos</td>
+                <td>@item.Name</td>
+                <td>@item.Score</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
