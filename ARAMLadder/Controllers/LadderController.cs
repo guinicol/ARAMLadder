@@ -29,7 +29,8 @@ namespace ARAMLadder.Controllers
                 ranking.Add(new RankingViewModel
                 {
                     Score = user.Score,
-                    Name = user.AramIdentityUser.riotName
+                    Name = user.AramIdentityUser.riotName,
+                    RiotId = user.AramIdentityUser.riotId
                 });
             }
 

@@ -20,7 +20,7 @@
             pos++;
             <tr>
                 <td>@pos</td>
-                <td>@item.Name</td>
+                <td><a  sp-action="Index" asp-controller="Match" asp-route-id="@item.RiotId">@item.Name</a></td>
                 <td>@item.Score</td>
             </tr>
         }

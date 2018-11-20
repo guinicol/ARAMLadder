@@ -119,7 +119,7 @@ namespace ARAMLadder.Controllers
                                                 dbContext.SaveChanges();
                                             }
                                             var lastGame = dbContext.LoginGames.OrderByDescending(x => x.Games.GameCreation).FirstOrDefault(x => x.AramIdentityUserId == user.Id);
-                                            var elo = GetEloCalc(lastGame, stats.win);
+
                                             var loginGame = new LoginGame
                                             {
                                                 Games = match,
@@ -134,13 +134,14 @@ namespace ARAMLadder.Controllers
                                                 FirstBloodKill = stats.firstBloodKill,
                                                 Win = stats.win,
                                                 Level = stats.champLevel,
-                                                Champion = champ,
-                                                WinStreak = elo.winStreak,
-                                                LoseStreak = elo.loseStreak,
-                                                PointWin = elo.pointWin,
-                                                PointLose = elo.pointLose,
-                                                Score = elo.score
+                                                Champion = champ
                                             };
+                                            var elo = GetEloCalc(lastGame, loginGame);
+                                            loginGame.WinStreak = elo.winStreak;
+                                            loginGame.LoseStreak = elo.loseStreak;
+                                            loginGame.PointWin = elo.pointWin;
+                                            loginGame.PointLose = elo.pointLose;
+                                            loginGame.Score = elo.score;
                                             var items = await GetItemsFromStatsAsync(stats);
                                             foreach (var item in items)
                                             {
@@ -430,7 +431,7 @@ namespace ARAMLadder.Controllers
                 LoginGame lastGame = null;
                 foreach (var item in userGame)
                 {
-                    var elo = GetEloCalc(lastGame, item.Win);
+                    var elo = GetEloCalc(lastGame, item);
                     item.LoseStreak = elo.loseStreak;
                     item.WinStreak = elo.winStreak;
                     item.PointLose = elo.pointLose;
@@ -570,7 +571,7 @@ namespace ARAMLadder.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private EloCalc GetEloCalc(LoginGame lastGame, bool win)
+        private EloCalc GetEloCalc(LoginGame lastGame, LoginGame newGame)
         {
             var EloCalc = new EloCalc
             {
@@ -582,7 +583,7 @@ namespace ARAMLadder.Controllers
             };
 
 
-            if (win)
+            if (newGame.Win)
             {
                 EloCalc.winStreak = lastGame != null ? lastGame.WinStreak + 1 : 1;
                 EloCalc.pointWin += (EloCalc.winStreak % 2 == 0 ? 1 : 0);
@@ -596,13 +597,26 @@ namespace ARAMLadder.Controllers
 
                 //Fin Cap
                 EloCalc.score += EloCalc.pointWin;
+
+                EloCalc.score += newGame.DoubleKills / 2;
+                EloCalc.score += newGame.TripleKills;
+                EloCalc.score += newGame.QuadraKills * 2;
+                EloCalc.score += newGame.PentaKills * 3;
+                EloCalc.score += newGame.FirstBloodKill ? 3 : 0;
+
+
             }
             else
             {
                 EloCalc.loseStreak = lastGame != null ? lastGame.LoseStreak + 1 : 1;
-                EloCalc.pointWin -= (EloCalc.loseStreak % 2 ==0 ? 1 : 0);
+                EloCalc.pointWin -= (EloCalc.loseStreak % 2 == 0 ? 1 : 0);
                 EloCalc.pointLose += (EloCalc.loseStreak % 2 == 0 ? 1 : 0);
                 EloCalc.score -= EloCalc.pointLose;
+                EloCalc.score += newGame.DoubleKills / 2;
+                EloCalc.score += newGame.TripleKills;
+                EloCalc.score += newGame.QuadraKills * 2;
+                EloCalc.score += newGame.PentaKills * 3;
+                EloCalc.score += newGame.FirstBloodKill ? 3 : 0;
             }
             return EloCalc;
         }
@@ -616,5 +630,5 @@ namespace ARAMLadder.Controllers
         }
     }
 
-    
+
 }

@@ -9,5 +9,6 @@ namespace ARAMLadder.Models
     {
         public int Score { get; set; }
         public string Name { get; set; }
+        public long RiotId { get; set; }
     }
 }
