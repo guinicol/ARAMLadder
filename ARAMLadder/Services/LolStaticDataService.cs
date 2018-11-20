@@ -34,6 +34,17 @@ namespace ARAMLadder.Services
                 {
                     realms = JsonConvert.DeserializeObject<RealmsDto>(await resp.Content.ReadAsStringAsync());
                 }
+                resp = await httpClient.GetAsync($"{dragonBaseUrl}api/versions.json");
+                if(resp.IsSuccessStatusCode)
+                {
+                    var v = JsonConvert.DeserializeObject<List<string>>(await resp.Content.ReadAsStringAsync());
+                    var lastVersion = v.First();
+                    realms.n.champion = lastVersion;
+                    realms.n.rune = lastVersion;
+                    realms.n.profileicon = lastVersion;
+                    realms.n.item = lastVersion;
+                    realms.n.summoner = lastVersion;
+                }
             }
         }
 

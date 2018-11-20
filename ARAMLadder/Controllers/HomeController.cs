@@ -404,7 +404,7 @@ namespace ARAMLadder.Controllers
                         Name = runeData.name
                     };
                     dbContext.Add(rune);
-                    await dbContext.SaveChangesAsync();
+                    dbContext.SaveChanges();
                 }
                 catch (KeyNotFoundException)
                 {
