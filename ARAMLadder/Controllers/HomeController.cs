@@ -600,8 +600,8 @@ namespace ARAMLadder.Controllers
             else
             {
                 EloCalc.loseStreak = lastGame != null ? lastGame.LoseStreak + 1 : 1;
-                EloCalc.pointWin -= (EloCalc.loseStreak / 2);
-                EloCalc.pointLose += (EloCalc.loseStreak / 2);
+                EloCalc.pointWin -= (EloCalc.loseStreak / 3);
+                EloCalc.pointLose += (EloCalc.loseStreak / 3);
                 EloCalc.score -= EloCalc.pointLose;
             }
             return EloCalc;
