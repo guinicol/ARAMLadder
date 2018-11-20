@@ -43,6 +43,9 @@
             <th>
                 Duration
             </th>
+            <th>
+                Score
+            </th>
             <th class="text-right">
                 K / D / A
             </th>
@@ -79,6 +82,9 @@
                 </td>
                 <td class="text-right">
                     @($"{game.Games.GameDuration / 60}:{durationMin}")
+                </td>
+                <td>
+                    @(game.Win ? game.PointWin : -game.PointLose)
                 </td>
                 <td class="text-right">
                     @Html.DisplayFor(modelItem => game.Kills) / @Html.DisplayFor(modelItem => game.Deaths) / @Html.DisplayFor(modelItem => game.Assists)

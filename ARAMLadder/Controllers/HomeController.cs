@@ -587,6 +587,14 @@ namespace ARAMLadder.Controllers
                 EloCalc.winStreak = lastGame != null ? lastGame.WinStreak + 1 : 1;
                 EloCalc.pointWin += (EloCalc.winStreak / 2);
                 EloCalc.pointLose -= (EloCalc.winStreak / 2);
+                //Cap Max
+                EloCalc.pointWin = EloCalc.pointWin <= 30 ? EloCalc.pointWin : 30;
+                EloCalc.pointLose = EloCalc.pointLose <= 30 ? EloCalc.pointLose : 30;
+                //Cap Min
+                EloCalc.pointWin = EloCalc.pointWin >= 10 ? EloCalc.pointWin : 10;
+                EloCalc.pointLose = EloCalc.pointLose >= 10 ? EloCalc.pointLose : 10;
+
+                //Fin Cap
                 EloCalc.score += EloCalc.pointWin;
             }
             else
