@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
 using System.Linq;
 
 namespace ARAMLadder.Controllers
@@ -18,13 +20,24 @@ namespace ARAMLadder.Controllers
         private IOptions<ApplicationConfiguration> options;
         private ILolStaticDataService lolStatic;
         private IRiotAPIService riotAPI;
-        public MatchController(UserManager<AramIdentityUser> userManager, ApplicationDbContext dbContext, IOptions<ApplicationConfiguration> options, ILolStaticDataService lolStatic, IRiotAPIService riotAPI)
+        private readonly IBackgroundTaskQueue queue;
+        private readonly IServiceProvider services;
+
+        public MatchController(UserManager<AramIdentityUser> userManager,
+            ApplicationDbContext dbContext,
+            IOptions<ApplicationConfiguration> options,
+            ILolStaticDataService lolStatic,
+            IRiotAPIService riotAPI,
+            IBackgroundTaskQueue queue,
+            IServiceProvider services)
         {
             this.userManager = userManager;
             this.dbContext = dbContext;
             this.options = options;
             this.lolStatic = lolStatic;
             this.riotAPI = riotAPI;
+            this.queue = queue;
+            this.services = services;
         }
         public async System.Threading.Tasks.Task<IActionResult> Index(int? id = null)
         {
@@ -52,7 +65,10 @@ namespace ARAMLadder.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                riotAPI.RefreshMatch(User.Identity.Name, refreshAll);
+                queue.QueueBackgroundWorkItem(async token =>
+                {
+                    await riotAPI.RefreshMatch(User.Identity.Name, refreshAll);
+                });
             }
         }
         public bool IsResfreshingMatch()
