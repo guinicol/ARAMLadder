@@ -76,6 +76,7 @@ namespace ARAMLadder
             services.Configure<ApplicationConfiguration>(
           Configuration.GetSection("ApplicationConfigurations"));
             services.AddScoped<ILolStaticDataService, LolStaticDataService>();
+            services.AddScoped<IRiotAPIService, RiotAPIService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

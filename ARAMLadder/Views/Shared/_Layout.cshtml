@@ -38,6 +38,10 @@
                         <li><a asp-area="" asp-controller="Match" asp-action="Index" asp-route-id="">Match</a></li>
                     }
                     <li><a asp-area="" asp-controller="Ladder" asp-action="Index">Ladder</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a id="refreshButton" href="#"><span class="glyphicon glyphicon-refresh" ></span></a></li>
+                    }
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
