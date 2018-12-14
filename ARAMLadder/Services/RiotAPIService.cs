@@ -199,6 +199,8 @@ namespace ARAMLadder.Services
                         SemaphoreSlim.Release();
                     }
                 }
+
+                UpdateElo();
             }
         }
         private async Task<List<Item>> GetItemsFromStatsAsync(ApplicationDbContext dbContext, ILolStaticDataService lolStatic, Stats stats)
@@ -391,6 +393,43 @@ namespace ARAMLadder.Services
                 }
             }
             return rune;
+        }
+        public void UpdateElo()
+        {
+            if (SemaphoreSlim.CurrentCount != 0)
+            {
+                SemaphoreSlim.Wait();
+                try
+                {
+                    using (var scope = scopeFactory.CreateScope())
+                    {
+                        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        var games = dbContext.LoginGames
+                        .Include(x => x.Games).GroupBy(x => x.AramIdentityUserId);
+                        foreach (var localGame in games)
+                        {
+                            var userGame = localGame.OrderBy(x => x.Games.GameCreation);
+                            LoginGame lastGame = null;
+                            foreach (var item in userGame)
+                            {
+                                var elo = GetEloCalc(lastGame, item);
+                                item.LoseStreak = elo.loseStreak;
+                                item.WinStreak = elo.winStreak;
+                                item.PointLose = elo.pointLose;
+                                item.PointWin = elo.pointWin;
+                                item.Score = elo.score;
+                                dbContext.Update(item);
+                                lastGame = item;
+                            }
+                        }
+                        dbContext.SaveChanges();
+                    }
+                }
+                finally
+                {
+                    SemaphoreSlim.Release();
+                }
+            }
         }
         private EloCalc GetEloCalc(LoginGame lastGame, LoginGame newGame)
         {

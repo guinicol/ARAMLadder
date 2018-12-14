@@ -75,32 +75,5 @@ namespace ARAMLadder.Controllers
         {
             return riotAPI.IsResfreshingMatch();
         }
-
-
-
-
-        //public IActionResult UpdateElo()
-        //{
-        //    var games = dbContext.LoginGames
-        //        .Include(x => x.Games).GroupBy(x => x.AramIdentityUserId);
-        //    foreach (var localGame in games)
-        //    {
-        //        var userGame = localGame.OrderBy(x => x.Games.GameCreation);
-        //        LoginGame lastGame = null;
-        //        foreach (var item in userGame)
-        //        {
-        //            var elo = GetEloCalc(lastGame, item);
-        //            item.LoseStreak = elo.loseStreak;
-        //            item.WinStreak = elo.winStreak;
-        //            item.PointLose = elo.pointLose;
-        //            item.PointWin = elo.pointWin;
-        //            item.Score = elo.score;
-        //            dbContext.Update(item);
-        //            lastGame = item;
-        //        }
-        //    }
-        //    dbContext.SaveChanges();
-        //    return Redirect("Index");
-        //}
     }
 }

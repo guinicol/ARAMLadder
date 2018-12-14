@@ -9,5 +9,6 @@ namespace ARAMLadder.Services
     {
         bool IsResfreshingMatch();
         Task RefreshMatch(string userName, bool refreshAll = false);
+        void UpdateElo();
     }
 }
