@@ -57,7 +57,7 @@ namespace ARAMLadder.Services
                             var matchIds = new List<long>();
                             using (var httpClient = new HttpClient())
                             {
-                                var beginTime = DateTime.UtcNow.AddDays(-14).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                            var beginTime = DateTimeOffset.UtcNow.AddDays(-14).ToUnixTimeMilliseconds();
                                 //var recentMatch = dbContext.LoginGames
                                 //        .Include(lg => lg.Games)
                                 //        .Where(g => g.AramIdentityUser.riotId == currentUser.riotId)
