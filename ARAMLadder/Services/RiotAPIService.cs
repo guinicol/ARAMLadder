@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -58,11 +59,12 @@ namespace ARAMLadder.Services
                             var matchIds = new List<long>();
                             using (var httpClient = new HttpClient())
                             {
-                                var recentMatch = dbContext.LoginGames
-                                        .Include(lg => lg.Games)
-                                        .Where(g => g.AramIdentityUser.riotId == currentUser.riotId)
-                                        .OrderByDescending(x => x.Games.GameCreation).FirstOrDefault();
-                                var begintime = recentMatch != null ? $"&beginTime={recentMatch.Games.GameCreation + 1}" : "";
+                                var beginTime = DateTime.UtcNow.AddDays(-14).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+                                //var recentMatch = dbContext.LoginGames
+                                //        .Include(lg => lg.Games)
+                                //        .Where(g => g.AramIdentityUser.riotId == currentUser.riotId)
+                                //        .OrderByDescending(x => x.Games.GameCreation).FirstOrDefault();
+                                var begintime = $"&beginTime={beginTime}";
                                 foreach (var riotId in riotIds)
                                 {
 
