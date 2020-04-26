@@ -34,7 +34,6 @@ namespace ARAMLadder.Controllers
         public async Task<IActionResult> Index(int? week = null, DayOfWeek day = DayOfWeek.Monday)
         {
 
-            
             var date = week == null ? DateTime.Today : FirstDateOfWeekISO8601(DateTime.Today.Year, week.Value);
             switch (day)
             {
@@ -57,7 +56,7 @@ namespace ARAMLadder.Controllers
                     date = date.AddDays(1);
                     break;
             }
-            ViewBag.Week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+            ViewBag.Week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             ViewBag.Day = date.DayOfWeek;
             long startDate = new DateTimeOffset(date).ToUnixTimeMilliseconds();
             long endDate = new DateTimeOffset(date.AddDays(1)).ToUnixTimeMilliseconds();
@@ -115,6 +114,7 @@ namespace ARAMLadder.Controllers
 
             // Subtract 3 days from Thursday to get Monday, which is the first weekday in ISO8601
             return result.AddDays(-3);
+
         }
 
         public IActionResult About()
