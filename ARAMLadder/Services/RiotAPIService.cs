@@ -53,9 +53,7 @@ namespace ARAMLadder.Services
                     try
                     {
                         var riotIds = dbContext.Users.Select(u => u.riotId).ToList();
-                        var currentUser = await userManager.FindByNameAsync(userName);
-                        if (currentUser.riotId != null)
-                        {
+                        
                             var matchIds = new List<long>();
                             using (var httpClient = new HttpClient())
                             {
@@ -189,7 +187,6 @@ namespace ARAMLadder.Services
                                 }
 
                             }
-                        }
                     }
                     finally
                     {
