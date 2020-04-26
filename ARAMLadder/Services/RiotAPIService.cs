@@ -66,18 +66,13 @@ namespace ARAMLadder.Services
                                 foreach (var riotId in riotIds)
                                 {
 
-                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v3/matchlists/by-account/{riotId}?api_key={options.Value.ApiRiotKey}&queue=450{begintime}");
+                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/{riotId}?api_key={options.Value.ApiRiotKey}&queue=450{begintime}");
                                     if (resp.IsSuccessStatusCode)
                                     {
                                         var matches = JsonConvert.DeserializeObject<ListMatchDto>(await resp.Content.ReadAsStringAsync());
                                         matchIds.AddRange(matches.matches.Select(x => x.gameId));
                                     }
                                 }
-
-                                matchIds = matchIds.GroupBy(x => x)
-                                  .Where(g => g.Count() > 2)
-                                  .Select(y => y.Key)
-                                  .ToList();
 
                                 var matchCount = 1;
                                 foreach (var matchId in matchIds)
@@ -89,7 +84,7 @@ namespace ARAMLadder.Services
                                         Thread.Sleep(1000);
                                         matchCount = 1;
                                     }
-                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v3/matches/{matchId}?api_key={options.Value.ApiRiotKey}");
+                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v4/matches/{matchId}?api_key={options.Value.ApiRiotKey}");
                                     if (resp.IsSuccessStatusCode)
                                     {
                                         var matchDto = JsonConvert.DeserializeObject<MatchDto>(await resp.Content.ReadAsStringAsync());

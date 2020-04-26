@@ -37,7 +37,7 @@ namespace ARAMLadder.Controllers
 
                 using (var httpClient = new HttpClient())
                 {
-                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{riotName}?api_key={options.Value.ApiRiotKey}");
+                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/{riotName}?api_key={options.Value.ApiRiotKey}");
                     if (resp.IsSuccessStatusCode)
                     {
                         PlayerDto player = JsonConvert.DeserializeObject<PlayerDto>(await resp.Content.ReadAsStringAsync());
