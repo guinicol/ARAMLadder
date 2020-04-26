@@ -8,7 +8,7 @@ namespace ARAMLadder.Models
 {
     public class AramIdentityUser : IdentityUser
     {
-        public long riotId { get; set; }
+        public string riotId { get; set; }
         public string riotName { get; set; }
     }
 }

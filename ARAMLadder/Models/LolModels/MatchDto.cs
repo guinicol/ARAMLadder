@@ -195,7 +195,7 @@
     public class Player
     {
         public string platformId { get; set; }
-        public long accountId { get; set; }
+        public string accountId { get; set; }
         public string summonerName { get; set; }
         public int summonerId { get; set; }
         public string currentPlatformId { get; set; }

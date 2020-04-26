@@ -39,7 +39,7 @@ namespace ARAMLadder.Controllers
             this.queue = queue;
             this.services = services;
         }
-        public async System.Threading.Tasks.Task<IActionResult> Index(int? id = null)
+        public async System.Threading.Tasks.Task<IActionResult> Index(string id = null)
         {
             AramIdentityUser user = null;
             if (id != null)
