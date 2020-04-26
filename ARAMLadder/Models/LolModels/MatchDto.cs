@@ -40,7 +40,7 @@
 
     public class Participant
     {
-        public int participantId { get; set; }
+        public string participantId { get; set; }
         public int teamId { get; set; }
         public int championId { get; set; }
         public int spell1Id { get; set; }
@@ -52,7 +52,7 @@
 
     public class Stats
     {
-        public int participantId { get; set; }
+        public string participantId { get; set; }
         public bool win { get; set; }
         public int item0 { get; set; }
         public int item1 { get; set; }
@@ -153,7 +153,7 @@
 
     public class Timeline
     {
-        public int participantId { get; set; }
+        public string participantId { get; set; }
         public Creepspermindeltas creepsPerMinDeltas { get; set; }
         public Xppermindeltas xpPerMinDeltas { get; set; }
         public Goldpermindeltas goldPerMinDeltas { get; set; }
@@ -188,7 +188,7 @@
 
     public class Participantidentity
     {
-        public int participantId { get; set; }
+        public string participantId { get; set; }
         public Player player { get; set; }
     }
 
