@@ -8,5 +8,6 @@ namespace ARAMLadder.Data
     public class ApplicationConfiguration
     {
         public string ApiRiotKey { get; set; }
+        public string QueueType { get; set; }
     }
 }

@@ -66,7 +66,7 @@ namespace ARAMLadder.Services
                                 foreach (var riotId in riotIds)
                                 {
 
-                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/{riotId}?api_key={options.Value.ApiRiotKey}&queue=450{begintime}");
+                                    var resp = await httpClient.GetAsync($"https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/{riotId}?api_key={options.Value.ApiRiotKey}&queue={options.Value.QueueType}{begintime}");
                                     if (resp.IsSuccessStatusCode)
                                     {
                                         var matches = JsonConvert.DeserializeObject<ListMatchDto>(await resp.Content.ReadAsStringAsync());
